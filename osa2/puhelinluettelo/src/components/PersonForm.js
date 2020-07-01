@@ -1,33 +1,12 @@
 import React from 'react'
 
-
-const PersonForm = ({persons, setPersons, setNewName, setNewNumber,
- newName, handleNameChange, newNumber, handleNumberChange}) => {
-
-	const AddName = (event) => {
-
-    if (persons.some(e => e.name === newName)) {
-      window.alert(`${newName} is already in the phonebook`)
-    }
-
-    else {
-
-      event.preventDefault()
-      const nameObject = {
-        id: persons.length + 1,
-        name: newName,
-        number: newNumber
-      }
-      setPersons(persons.concat(nameObject))
-      setNewName('')
-      setNewNumber('')
-    }
-  }
+const PersonForm = (props) => {
+	
 
 	return (
-		<form onSubmit={AddName}>
-		<div> name: <input value={newName} onChange={handleNameChange}/> </div>
-		<div> number: <input value={newNumber} onChange={handleNumberChange}/> </div>
+		<form onSubmit={props.AddName}>
+		<div> name: <input value={props.newName} onChange={props.handleNameChange}/> </div>
+		<div> number: <input value={props.newNumber} onChange={props.handleNumberChange}/> </div>
 		<div> <button type="submit">add</button> </div>
 		</form>
 		)
