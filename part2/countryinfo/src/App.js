@@ -1,26 +1,50 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react'
+import Filter from './components/Filter'
+import RenderCountries from './components/RenderCountries'
 
-function App() {
+import axios from 'axios'
+
+const App = () => {
+
+  const [ countries, setCountries] = useState([])
+  const [ newCountrySearch, setCountrySearch ] = useState('')
+
+  const hook = () => {
+    console.log('effect')
+    axios
+    .get('https://restcountries.eu/rest/v2/all')
+    .then(response => {
+      console.log('promise fulfilled')
+      setCountries(response.data)
+    })
+  } 
+  useEffect(hook, [])
+
+  const handleCountrySearch = (event) => {
+    setCountrySearch(event.target.value)
+  }
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+    <div>
+    <Filter 
+    newCountrySearch = {newCountrySearch}
+    handleCountrySearch = {handleCountrySearch}
+    />
+
+    <RenderCountries
+    countries = {countries}
+    newCountrySearch = {newCountrySearch}
+    />
     </div>
-  );
+    )
 }
 
-export default App;
+export default App
+
+
+/*{    {countries.map((country, i) => 
+      <li key={i}> {country.name}</li>
+      )}
+    </div>}*/

@@ -21,7 +21,6 @@ const App = () => {
       setPersons(response.data)
     })
   } 
-
   useEffect(hook, [])
 
   const handleNameChange = (event) => {
