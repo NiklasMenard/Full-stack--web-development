@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 
 const SingleCountryInfo = ({countries, singleCountry}) => {
 
@@ -19,25 +19,26 @@ const SingleCountryInfo = ({countries, singleCountry}) => {
 			<li key = {i}> {language.name}</li>)}
 		<img src = {countryToShow[0].flag} width="100" height="100" alt = "flag"/>
 		</div>
-	)
+
+		)
 }
 
-const RenderCountries = ({countries, newCountrySearch}) => {
+const RenderCountries = ({countries, newCountrySearch, showSingleCountry, setSingleCountry, singleCountry}) => {
 
 	const countriesToShow = !newCountrySearch
 	? countries
 	: countries.filter
 	(country => country.name.toLowerCase().includes(newCountrySearch.toLowerCase()))
 
-	const [ singleCountry, setSingleCountry ] = useState('')
-
-	const showSingleCountry = (event) => {
-		console.log(singleCountry)
-		setSingleCountry(event)
-	}
-
 	if(newCountrySearch === ''){
-		return(<p>Type country name</p>)
+		setSingleCountry('')
+		return (
+			<div>
+			{countriesToShow.map((country, i) => 
+				<li key={i}> {country.name}</li>)}
+			</div>
+
+		)
 	}
 
 	if(countriesToShow.length === 1 ){
@@ -53,7 +54,7 @@ const RenderCountries = ({countries, newCountrySearch}) => {
 		return(<p>Too many matches</p>)
 	}
 
-	else {
+	else if(countriesToShow.length < 10){
 		return (
 			<div>
 			{countriesToShow.map((country, i) => 
@@ -61,7 +62,17 @@ const RenderCountries = ({countries, newCountrySearch}) => {
 				<button onClick={() => showSingleCountry(country.name)}>Show</button> </li>)}
 			</div>
 			)
-	} 
+
+	} else {
+
+		return (
+			<div>
+			{countriesToShow.map((country, i) => 
+				<li key={i}> {country.name}</li>)}
+			</div>
+
+			)
+	}
 }
 
 export default RenderCountries

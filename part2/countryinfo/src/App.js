@@ -8,6 +8,7 @@ const App = () => {
 
   const [ countries, setCountries] = useState([])
   const [ newCountrySearch, setCountrySearch ] = useState('')
+  const [ singleCountry, setSingleCountry ] = useState('')
 
   const hook = () => {
     axios
@@ -22,6 +23,9 @@ const App = () => {
     setCountrySearch(event.target.value)
   }
 
+  const showSingleCountry = (event) => {
+  setSingleCountry(event)
+  }
 
   return(
 
@@ -34,6 +38,9 @@ const App = () => {
     <RenderCountries
     countries = {countries}
     newCountrySearch = {newCountrySearch}
+    showSingleCountry = {showSingleCountry}
+    setSingleCountry = {setSingleCountry}
+    singleCountry = {singleCountry}
     />
     </div>
 
