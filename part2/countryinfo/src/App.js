@@ -20,12 +20,20 @@ const App = () => {
   useEffect(hook, [])
 
   const handleCountrySearch = (event) => {
+    if(newCountrySearch === '' ){
+      setSingleCountry('')
+    }
     setCountrySearch(event.target.value)
   }
 
-  const showSingleCountry = (event) => {
-  setSingleCountry(event)
+  const countryClicked = (countryClicked) => {
+  setSingleCountry(countryClicked)
   }
+
+  const countriesToShow = !newCountrySearch
+  ? countries
+  : countries.filter
+  (country => country.name.toLowerCase().includes(newCountrySearch.toLowerCase()))
 
   return(
 
@@ -36,10 +44,9 @@ const App = () => {
     />
 
     <RenderCountries
-    countries = {countries}
+    countriesToShow = {countriesToShow}
     newCountrySearch = {newCountrySearch}
-    showSingleCountry = {showSingleCountry}
-    setSingleCountry = {setSingleCountry}
+    countryClicked = {countryClicked}
     singleCountry = {singleCountry}
     />
     </div>
