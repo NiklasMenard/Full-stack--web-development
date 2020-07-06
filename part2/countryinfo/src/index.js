@@ -4,6 +4,6 @@ import App from './App'
 
 
 ReactDOM.render(
-  <App puhelinluettelo />,
+  <App countryinfo />,
   document.getElementById('root')
 )

@@ -1,11 +1,31 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+
+import axios from 'axios'
+
 
 const SingleCountryInfo = ({countryToShow}) => {
 
-	return (
+	const api_key = process.env.REACT_APP_API_KEY
+	const [ weather, setWeather]  = useState([])
 
+	const weatherhook = () => {
+		axios
+		.get('http://api.weatherstack.com/current', {
+			params: {
+				access_key : api_key,
+				query : countryToShow[0].name
+			}
+		})
+		.then(response => {
+			setWeather(response.data)
+		})
+	} 
+	useEffect(weatherhook, [])
+
+	if(weather.current){
+			return (
 		<div>
-			<h2>{countryToShow[0].name}</h2>
+		<h2>{countryToShow[0].name}</h2>
 			<p>
 			Capital: {countryToShow[0].capital}
 			<br/>
@@ -15,9 +35,20 @@ const SingleCountryInfo = ({countryToShow}) => {
 			{countryToShow[0].languages.map((language, i) =>
 				<li key = {i}> {language.name}</li>)}
 			<img src = {countryToShow[0].flag} width="100" height="100" alt = "flag"/>
+		<h2>Weather in {countryToShow[0].capital}</h2>
+			<p>
+			Temperature: {weather.current.temperature}
+			<br/>
+			<img src = {weather.current.weather_icons[0]} width="100" height="100" alt = "flag"/>
+			<br/>
+			Wind: {weather.current.wind_speed}
+			</p>
 		</div>
-
 		)
+	}
+	return (
+		<p>Loading...</p>
+	)
 }
 
 const RenderCountries = (props) => {
@@ -30,18 +61,17 @@ const RenderCountries = (props) => {
 			{countriesToShow.map((country, i) => 
 				<li key={i}> {country.name}</li>)}
 			</div>
-		)
+			)
 	}
 
 	if(countriesToShow.length === 1 ){
-		console.log(singleCountry)
 		return(<SingleCountryInfo countryToShow = {countriesToShow}/>)
 	}
 
 	else if(singleCountry !== ''){
 
 		const countryClicked = countriesToShow.filter
-  		(country => country.name.toLowerCase().includes(singleCountry.toLowerCase()))
+		(country => country.name.toLowerCase().includes(singleCountry.toLowerCase()))
 
 		return(<SingleCountryInfo countryToShow = {countryClicked}/>)
 	}
@@ -67,7 +97,7 @@ const RenderCountries = (props) => {
 				<li key={i}> {country.name}</li>)}
 			</div>
 
-			)
+		)
 	}
 }
 

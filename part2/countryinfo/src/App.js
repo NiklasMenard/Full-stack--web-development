@@ -10,14 +10,19 @@ const App = () => {
   const [ newCountrySearch, setCountrySearch ] = useState('')
   const [ singleCountry, setSingleCountry ] = useState('')
 
-  const hook = () => {
+  const countryhook = () => {
     axios
     .get('https://restcountries.eu/rest/v2/all')
     .then(response => {
       setCountries(response.data)
     })
   } 
-  useEffect(hook, [])
+  useEffect(countryhook, [])
+
+  const countriesToShow = !newCountrySearch
+  ? countries
+  : countries.filter
+  (country => country.name.toLowerCase().includes(newCountrySearch.toLowerCase()))
 
   const handleCountrySearch = (event) => {
     if(newCountrySearch === '' ){
@@ -30,25 +35,20 @@ const App = () => {
   setSingleCountry(countryClicked)
   }
 
-  const countriesToShow = !newCountrySearch
-  ? countries
-  : countries.filter
-  (country => country.name.toLowerCase().includes(newCountrySearch.toLowerCase()))
-
   return(
 
     <div>
-    <Filter 
-    newCountrySearch = {newCountrySearch}
-    handleCountrySearch = {handleCountrySearch}
-    />
+      <Filter 
+      newCountrySearch = {newCountrySearch}
+      handleCountrySearch = {handleCountrySearch}
+      />
 
-    <RenderCountries
-    countriesToShow = {countriesToShow}
-    newCountrySearch = {newCountrySearch}
-    countryClicked = {countryClicked}
-    singleCountry = {singleCountry}
-    />
+      <RenderCountries
+      countriesToShow = {countriesToShow}
+      newCountrySearch = {newCountrySearch}
+      countryClicked = {countryClicked}
+      singleCountry = {singleCountry}
+      />
     </div>
 
     )
