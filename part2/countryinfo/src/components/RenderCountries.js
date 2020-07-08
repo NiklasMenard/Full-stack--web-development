@@ -12,15 +12,12 @@ const SingleCountryInfo = ({countryToShow}) => {
 		axios
 		.get('http://api.weatherstack.com/current', {
 			params: {
-				access_key : api_key,
-				query : countryToShow[0].name
-			}
-		})
+			access_key : api_key,
+			query : countryToShow[0].name
+			}})
 		.then(response => {
-			setWeather(response.data)
-		})
-	} 
-	useEffect(weatherhook, [])
+			setWeather(response.data)})} 
+			useEffect(weatherhook, [])
 
 	if(weather.current){
 			return (
@@ -62,7 +59,11 @@ const RenderCountries = (props) => {
 			)
 	}
 
-	if(countriesToShow.length === 1 ){
+	else if(countriesToShow.length > 10 && newCountrySearch){
+		return(<p>Too many matches</p>)
+	}
+
+	else if(countriesToShow.length === 1 ){
 		return(<SingleCountryInfo countryToShow = {countriesToShow}/>)
 	}
 
@@ -74,10 +75,6 @@ const RenderCountries = (props) => {
 		return(<SingleCountryInfo countryToShow = {countryClicked}/>)
 	}
 
-	else if(countriesToShow.length > 10 && newCountrySearch){
-		return(<p>Too many matches</p>)
-	}
-
 	else if(countriesToShow.length < 10){
 		return (
 			<div>
@@ -85,16 +82,6 @@ const RenderCountries = (props) => {
 				<li key={i}> {country.name}
 				<button onClick={() => countryClicked(country.name)}>Show</button> </li>)}
 			</div>
-			)
-
-	} else {
-
-		return (
-			<div>
-			{countriesToShow.map((country, i) => 
-				<li key={i}> {country.name}</li>)}
-			</div>
-
 		)
 	}
 }

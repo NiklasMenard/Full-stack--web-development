@@ -11,13 +11,11 @@ const App = () => {
   const [ singleCountry, setSingleCountry ] = useState('')
 
   const countryhook = () => {
-    axios
-    .get('https://restcountries.eu/rest/v2/all')
-    .then(response => {
-      setCountries(response.data)
-    })
-  } 
-  useEffect(countryhook, [])
+  axios
+  .get('https://restcountries.eu/rest/v2/all')
+  .then(response => {
+      setCountries(response.data)})} 
+      useEffect(countryhook, [])
 
   const handleCountrySearch = (event) => {
     if(newCountrySearch === '' ){
