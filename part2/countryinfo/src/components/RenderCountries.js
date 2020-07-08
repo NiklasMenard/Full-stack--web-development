@@ -38,7 +38,7 @@ const SingleCountryInfo = ({countryToShow}) => {
 			<br/>
 			<img src = {weather.current.weather_icons[0]} width="100" height="100" alt = "flag"/>
 			<br/>
-			Wind: {weather.current.wind_speed}
+			Wind: {weather.current.wind_speed} mph direction {weather.current.wind_dir}
 			</p>
 		</div>
 		)
