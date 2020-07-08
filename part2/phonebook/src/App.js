@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import personService from './services/personService'
 
-import axios from 'axios'
 
 const App = () => {
 
@@ -12,70 +12,99 @@ const App = () => {
   const [ newNumber, setNewNumber ] = useState('')
   const [ showName, setShowName ] = useState('')
 
-  const hook = () => {
-    console.log('effect')
-    axios
-    .get('http://localhost:3001/persons')
-    .then(response => {
-      console.log('promise fulfilled')
-      setPersons(response.data)
-    })
-  } 
-  useEffect(hook, [])
+  useEffect(() => {
+    personService
+      .getAll()
+        .then(initialPersons => {
+        setPersons(initialPersons)
+      })
+  }, [])
 
-  const handleNameChange = (event) => {
+const handleNameChange = (event) => {
     setNewName(event.target.value)
   }
 
-  const handleNumberChange = (event) => {
+const handleNumberChange = (event) => {
     setNewNumber(event.target.value)
   }
 
-  const handleShowName = (event) => {
+const handleShowName = (event) => {
     setShowName(event.target.value)
   }
 
-  const AddName = (event) => {
+const AddName = (event) => {
 
-    if (persons.some(e => e.name === newName)) {
-      window.alert(`${newName} is already in the phonebook`)
+    if (persons.some(e => e.name.toLowerCase() === newName.toLowerCase() && 
+    	e.number===newNumber)) {
+    	window.alert(`${newName} is already in the phonebook`)
     }
 
-    else {
+    else if (persons.some(e => e.name.toLowerCase() === newName.toLowerCase() && 
+    	e.number!==newNumber)) {
+    	const result = window.confirm(`${newName} is already in the phonebook, 
+    	want to change the number?`)
 
-      event.preventDefault()
-      const nameObject = {
-        id: persons.length + 1,
+    	if(result){
+
+    	const changePerson =  persons.find(person => 
+    	person.name.toLowerCase() === newName.toLowerCase())
+    	const changedNumber = {...changePerson, number: newNumber}
+    	    	personService
+    	    	.update(changePerson.id, changedNumber)
+    	    	.then(response => {
+    	    	setPersons(persons.map(person => person.id !== changePerson.id ? person : response.data))
+				})
+      		} 
+    	}
+    else {
+    	event.preventDefault()
+    	const nameObject = {
         name: newName,
         number: newNumber
       }
-      setPersons(persons.concat(nameObject))
-      setNewName('')
-      setNewNumber('')
+     	personService
+	    .create(nameObject)
+	    .then(returnedPerson => {
+	    setPersons(persons.concat(returnedPerson))
+	    setNewName('')
+	    setNewNumber('')})
+  		}
     }
-  }
+
+const RemoveContact = (name, id) => {
+	const message =  `Do you want to delete '${name}'?`
+	const result = window.confirm(message)
+	if(result){
+      personService
+      .remove(id)
+      	.then(removeMessage => {
+      		window.alert(removeMessage)
+      		setPersons(persons.filter(person => person.id !== id))
+      	})
+		}
+	}
+
   return (
 
     <div>
-    <h2>Phonebook</h2>
-    <Filter showName={showName} handleShowName={handleShowName} />
+	    <h2>Phonebook</h2>
+	    <Filter showName={showName} handleShowName={handleShowName} />
     <div>
     <h2>Add a new contact</h2>
-    <PersonForm
-    AddName = {AddName}
-    persons = {persons}
-    setPersons = {setPersons}
-    setNewName = {setNewName}
-    setNewNumber = {setNewNumber}
-    newName= {newName} 
-    handleNameChange = {handleNameChange}
-    newNumber = {newNumber}
-    handleNumberChange = {handleNumberChange}
-    />
+    	<PersonForm
+		    AddName = {AddName}
+		    persons = {persons}
+		    setPersons = {setPersons}
+		    setNewName = {setNewName}
+		    setNewNumber = {setNewNumber}
+		    newName= {newName} 
+		    handleNameChange = {handleNameChange}
+		    newNumber = {newNumber}
+		    handleNumberChange = {handleNumberChange}
+    	/>
     </div>
     <h3>Numbers</h3>
-    <Persons persons = {persons} showName = {showName}
-    />
+    	<Persons persons = {persons} showName = {showName} RemoveContact = {RemoveContact}/>
     </div>
 
     )

@@ -19,11 +19,6 @@ const App = () => {
   } 
   useEffect(countryhook, [])
 
-  const countriesToShow = !newCountrySearch
-  ? countries
-  : countries.filter
-  (country => country.name.toLowerCase().includes(newCountrySearch.toLowerCase()))
-
   const handleCountrySearch = (event) => {
     if(newCountrySearch === '' ){
       setSingleCountry('')
@@ -34,6 +29,11 @@ const App = () => {
   const countryClicked = (countryClicked) => {
   setSingleCountry(countryClicked)
   }
+
+  const countriesToShow = !newCountrySearch
+  ? countries
+  : countries.filter
+  (country => country.name.toLowerCase().includes(newCountrySearch.toLowerCase()))
 
   return(
 

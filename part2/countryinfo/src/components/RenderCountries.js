@@ -33,7 +33,7 @@ const SingleCountryInfo = ({countryToShow}) => {
 			</p>
 		<h2>Languages</h2>
 			{countryToShow[0].languages.map((language, i) =>
-				<li key = {i}> {language.name}</li>)}
+			<li key = {i}> {language.name}</li>)}
 			<img src = {countryToShow[0].flag} width="100" height="100" alt = "flag"/>
 		<h2>Weather in {countryToShow[0].capital}</h2>
 			<p>
@@ -46,9 +46,7 @@ const SingleCountryInfo = ({countryToShow}) => {
 		</div>
 		)
 	}
-	return (
-		<p>Loading...</p>
-	)
+	return (null)
 }
 
 const RenderCountries = (props) => {
