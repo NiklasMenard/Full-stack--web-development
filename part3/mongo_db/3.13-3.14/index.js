@@ -2,10 +2,22 @@ require('dotenv').config()
 const express = require('express')
 const app = express()
 const Person = require('./models/person')
-const { response } = require('express')
+const { response, json } = require('express')
 
 app.use(express.json())
 app.use(express.static('build'))
+
+app.get('/info', (req, res, next) => {
+
+  Person
+    .estimatedDocumentCount()
+    .then(count => {
+      const length = count
+      const date = new Date()
+      res.send('Phonebook has info for ' + length + ' people ' + date)
+    })
+    .catch(error => next(error))
+})
 
 
 app.get('/api/persons', (req, res) => {
@@ -14,7 +26,7 @@ app.get('/api/persons', (req, res) => {
   })
 })
 
-app.get('/api/persons/:id', (req, res) => {
+app.get('/api/persons/:id', (req, res, next) => {
   Person.findById(req.params.id)
     .then(person => {
       if (person) {
@@ -27,7 +39,7 @@ app.get('/api/persons/:id', (req, res) => {
 })
 
 
-app.delete('/api/persons/:id', (req, res) => {
+app.delete('/api/persons/:id', (req, res, next) => {
   Person.findByIdAndRemove(req.params.id)
     .then(result => {
       res.status(204).end()
@@ -36,6 +48,7 @@ app.delete('/api/persons/:id', (req, res) => {
 })
 
 app.post('/api/persons', (req, res) => {
+  console.log(req.body)
   const body = req.body
 
   if (!body.name) {
@@ -52,6 +65,21 @@ app.post('/api/persons', (req, res) => {
   person.save().then(savedPerson => {
     res.json(savedPerson)
   })
+})
+
+app.put('/api/persons/:id', (request, response, next) => {
+  const body = request.body
+
+  const person = {
+    name: body.name,
+    number: body.number,
+  }
+
+  Person.findByIdAndUpdate(request.params.id, person, { new: true })
+    .then(updatedPerson => {
+      response.json(updatedPerson)
+    })
+    .catch(error => next(error))
 })
 
 const unknownEndpoint = (request, response) => {
