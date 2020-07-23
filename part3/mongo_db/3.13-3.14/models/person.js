@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+var uniqueValidator = require('mongoose-unique-validator');
 mongoose.set('useFindAndModify', false)
 
 const url = process.env.MONGODB_URI
@@ -12,11 +13,14 @@ const personSchema = new mongoose.Schema({
   name: {
   type: String,
   minlength: 3,
-  required: true
+  required: true,
+  unique : true
   },
   number: {
   type: String,
-  required: true
+  minlength: 8,
+  required: true,
+  unique : true
   }
   })
 
@@ -27,5 +31,7 @@ personSchema.set('toJSON', {
     delete returnedObject.__v
   }
 })
+
+personSchema.plugin(uniqueValidator)
 
 module.exports = mongoose.model('Person', personSchema)
