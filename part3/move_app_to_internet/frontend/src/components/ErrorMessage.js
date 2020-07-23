@@ -9,7 +9,7 @@ const ErrorMessage = ({ message }) => {
 	if (message === "addError") {
 		return (
 			<div className="errorMessage">
-				Wrong input or name already in phonebook
+				Name or number too short
 			</div>
 		)
 	}
