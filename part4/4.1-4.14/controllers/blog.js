@@ -9,8 +9,6 @@ blogRouter.get('/', async (request, response) => {
 blogRouter.post('/', async (request, response) => {
   const body = request.body
 
-  console.log(request.body.title)
-  
   if(!request.body.likes) {
     request.body.like = 0;
   }
@@ -42,6 +40,11 @@ blogRouter.get('/:id', async (request, response, next) => {
 blogRouter.delete('/:id', async (request, response) => {
   await Blog.findByIdAndRemove(request.params.id)
   response.status(204).end()
+})
+
+blogRouter.put('/:id', async(request, response, next) => {
+  await Blog.findByIdAndUpdate(request.params.id, request.body, { new: true })
+  response.status(200).end()
 })
 
 module.exports = blogRouter
