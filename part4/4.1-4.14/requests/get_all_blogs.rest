@@ -1,12 +1,23 @@
-PUT http://localhost:3001/api/blogs/5f84b5278e53776f9a1a1400
+# POST http://localhost:3001/api/blogs/
+# Content-Type: application/json
 
-Content-Type: application/json
+# {
+#     "title": "Test 2",
+#     "author": "Test Author 2",
+#     "url": "Test url 2",
+#     "likes": 4,
+#     "userId": "5f85dbe5f0738868569e3617"
+# }
+
+# ###
+# GET http://localhost:3001/api/users/
+
+###
+
+POST http://localhost:3001/api/users 
+content-type: application/json
 
 {
-    "title": "Test 2",
-    "author": "Test Author 2",
-    "url": "Test url 2",
-    "likes": 5,
-}
+    "username": "testuser", "name": "testname", "password": "testpassword"
 
-# GET http://localhost:3001/api/blogs/
+}
